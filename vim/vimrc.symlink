@@ -1,4 +1,1193 @@
-syntax on
+" Creating a mapping key for comment block based on filename
+" This file is source by .exrc
+" Usage:
+"+ Mark beginning point and ending point by mq and mw
+"+ Type these control keys in command mode:
+"  - CRTL_W D    : comment lines from `q to `w
+"  - CRTL_W F    : uncomment lines from `q to `w
 
-" Wrap gitcommit file types at the appropriate length
-filetype indent plugin on
+
+
+" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+function! Make_Comments()
+   if(&ft == "asm")                                "asm
+     :s/^/; /
+   elseif ((&ft == "verilog") || (&ft == "sc"))    "verilog
+     :s/^/\/\/ /
+   elseif ((&ft == "c") || (&ft == "cpp"))         "C
+     :s/^/\/\/ /
+   elseif (&ft == "vim")                           "vim
+     :s/^/" /
+   elseif (&ft == "matlab")                        "Matlab
+     :s/^/% /
+   elseif (&ft == "psl")                           "PSL
+     :s/^/\/\/ /
+   elseif (&ft == "sbt") || (&ft == "scala")       "scala
+     :s/^/\/\/ /
+   else                                            "csh, perl, tcl
+     :s/^/# /
+   endif
+":%s/a/b/g
+":%s/b/2/g
+":%s/c/3
+endfunction
+":com Make_Comments call Make_Comments()
+:map <C-W><C-D> :call Make_Comments()<CR>
+" ---------------------------------------------------------
+:map <C-C> "+y<ESC>
+:map <C-W><C-V> "+gp<ESC><LEFT><LEFT><LEFT>
+:map <C-W><C-X> "+x<ESC>
+:map <C-W><C-A> <ESC>ggVG$
+:map <C-Y> <Esc><C-R>
+:map <F5> :e!<CR>
+:map <F2> :mksession ~/.vim/session/
+:map <F3> :source ~/.vim/session/
+
+":map <C-S> :`w<CR>
+" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+function! Make_Uncomments()
+  if(&ft == "asm")                               " asm
+    if( getline('.') =~ '^ *;')                " if line start with zero or more spaces followed by ;
+      :s/^\( *\); \=/\1/
+    endif
+  elseif ((&ft == "verilog") || (&ft == "sc"))    "verilog
+    if( getline('.') =~ '^ *\/\/')             " if line start with zero or more spaces followed by //
+      :s/^\( *\)\/\/ \=/\1/
+    endif
+  elseif ((&ft == "c") || (&ft == "cpp"))         "C
+    if( getline('.') =~ '^ *\/\/')             " if line start with zero or more spaces followed by //
+      :s/^\( *\)\/\/ \=/\1/
+    endif
+  elseif (&ft == "vim")                           " vim
+    if( getline('.') =~ '^ *"')
+      :s/^\( *\)" \=/\1/
+    endif
+  elseif (&ft == "matlab")                        " Matlab
+    if( getline('.') =~ '^ *%')
+      :s/^\( *\)% \=/\1/
+    endif
+  elseif (&ft == "psl")                           " PSL
+    if( getline('.') =~ '^ *\/\/')
+      :s/^\( *\)\/\/ \=/\1/
+    endif
+  else                                            " csh, perl, tcl
+    if( getline('.') =~ '^ *#')                " if line start with zero or more spaces followed by #
+      :s/^\( *\)# \=/\1/
+    endif
+  endif
+endfunction
+:map <C-W><C-F> :call Make_Uncomments()<CR>
+" ---------------------------------------------------------
+
+"Map for increment
+"
+" vnoremap <C-A> :Inc<CR>
+" vnoremap <C-X> :Inc -1<CR>
+
+" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+"select all, same with Ctrl-A
+:map <C-W><C-A> gg <S-V> G
+" ---------------------------------------------------------
+"Disable below funtionc June 03,2009 Remove
+"
+
+":com Add_comments call Add_comments()
+:com -range=% -nargs=* Comments call Add_comments(<f-args>)
+" ---------------------------------------------------------
+
+
+
+""" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+""" Make if function
+"":function Make_if()
+"": if (@% =~ "[\.]v$" || @% =~ "[\.]V$" || @% =~ "[\.]l$" || @% =~ "[\.]y$" )   "if file is *.v or *.V
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "if () begin"
+"":    let @d = "end"
+"":    let @e = "\n"
+"": elseif (@% =~ "[\.]c$" || @% =~ "[\.]h$" || @% =~ "[\.]H$" || @% =~ "[\.]cpp$" )   "if file is *.c or *.cpp
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "if () {"
+"":    let @d = "}"
+"":    let @e = "\n"
+"": elseif (@% =~ "[\.]pl$")   "if file is *.pl
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "if () {"
+"":    let @d = "}"
+"":    let @e = "\n"
+"": else
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "if () then"
+"":    let @d = "endif"
+"":    let @e = "\n"
+"": endif
+"": normal ^
+"": normal "cp
+"": normal "ep
+"": normal "bp
+"": normal "ap
+"": normal "ep
+"": normal "ap
+"": normal "dp
+"": normal "ep
+"": normal dd
+"": normal k
+"": normal k
+"": normal k
+"": normal $
+"": normal b
+"": normal b
+"": normal e
+"":endfunction
+"":com If call Make_if()
+""" ---------------------------------------------------------
+""
+""
+""" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+""" Make if-else function
+"":function Make_ifelse()
+"": if (@% =~ "[\.]v$" || @% =~ "[\.]V$" || @% =~ "[\.]l$" || @% =~ "[\.]y$" )   "if file is *.v or *.V
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "if () begin"
+"":    let @d = "end else begin"
+"":    let @e = "end"
+"":    let @f = "\n"
+"": elseif (@% =~ "[\.]c$" || @% =~ "[\.]h$" || @% =~ "[\.]H$" || @% =~ "[\.]cpp$" )   "if file is *.c or *.cpp
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "if () {"
+"":    let @d = "} else {"
+"":    let @e = "}"
+"":    let @f = "\n"
+"": elseif (@% =~ "[\.]pl$")   "if file is *.pl
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "if () {"
+"":    let @d = "} else {"
+"":    let @e = "}"
+"":    let @f = "\n"
+"": else
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "if () then"
+"":    let @d = "else"
+"":    let @e = "endif"
+"":    let @f = "\n"
+"": endif
+"": normal ^
+"": normal "cp
+"": normal "fp
+"": normal "bp
+"": normal "ap
+"": normal "fp
+"": normal "ap
+"": normal "dp
+"": normal "fp
+"": normal "bp
+"": normal "ap
+"": normal "fp
+"": normal "ap
+"": normal "ep
+"": normal "fp
+"": normal dd
+"": normal k
+"": normal k
+"": normal k
+"": normal k
+"": normal k
+"": normal $
+"": normal b
+"": normal b
+"": normal e
+"":endfunction
+"":com Ifelse call Make_ifelse()
+""" ---------------------------------------------------------
+""
+""
+""" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+""" Make for function
+"":function Make_for()
+"": if (@% =~ "[\.]v$" || @% =~ "[\.]V$" || @% =~ "[\.]l$" || @% =~ "[\.]y$" )   "if file is *.v or *.V
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "for() begin"
+"":    let @d = "end"
+"":    let @e = "\n"
+"": elseif (@% =~ "[\.]c$" || @% =~ "[\.]h$" || @% =~ "[\.]H$" || @% =~ "[\.]cpp$" )   "if file is *.c or *.cpp
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "for() {"
+"":    let @d = "}"
+"":    let @e = "\n"
+"": elseif (@% =~ "[\.]pl$")   "if file is *.pl
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "for() {"
+"":    let @d = "}"
+"":    let @e = "\n"
+"": else
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "for() {"
+"":    let @d = "}"
+"":    let @e = "\n"
+"": endif
+"": normal ^
+"": normal "cp
+"": normal "ep
+"": normal "bp
+"": normal "ap
+"": normal "ep
+"": normal "ap
+"": normal "dp
+"": normal "ep
+"": normal dd
+"": normal k
+"": normal k
+"": normal k
+"": normal $
+"": normal b
+"": normal b
+"": normal e
+"":endfunction
+"":com For call Make_for()
+""" ---------------------------------------------------------
+""
+""
+""" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+""" Make while function
+"":function Make_while()
+"": if (@% =~ "[\.]v$" || @% =~ "[\.]V$" || @% =~ "[\.]l$" || @% =~ "[\.]y$" )   "if file is *.v or *.V
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "while() begin"
+"":    let @d = "end"
+"":    let @e = "\n"
+"": elseif (@% =~ "[\.]c$" || @% =~ "[\.]h$" || @% =~ "[\.]H$" || @% =~ "[\.]cpp$" )   "if file is *.c or *.cpp
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "while() {"
+"":    let @d = "}"
+"":    let @e = "\n"
+"": elseif (@% =~ "[\.]pl$")   "if file is *.pl
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "while() {"
+"":    let @d = "}"
+"":    let @e = "\n"
+"": else
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":    let @b = "  "
+"":    let @c = "while() then"
+"":    let @d = "end"
+"":    let @e = "\n"
+"": endif
+"": normal ^
+"": normal "cp
+"": normal "ep
+"": normal "bp
+"": normal "ap
+"": normal "ep
+"": normal "ap
+"": normal "dp
+"": normal "ep
+"": normal dd
+"": normal k
+"": normal k
+"": normal k
+"": normal $
+"": normal b
+"": normal b
+"": normal e
+"":endfunction
+"":com While call Make_while()
+""" ---------------------------------------------------------
+""
+""
+""" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+""" Make initial
+"":function Make_init()
+"": if (@% =~ "[\.]v$" || @% =~ "[\.]V$" || @% =~ "[\.]l$" || @% =~ "[\.]y$" )   "if file is *.v or *.V
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":   let @b = "  "
+"":   let @c = "initial  begin"
+"":   let @d = "end"
+"":   let @e = "\n"
+"":   normal ^
+"":   normal "cp
+"":   normal "ep
+"":   normal "bp
+"":   normal "ap
+"":   normal "ep
+"":   normal "ap
+"":   normal "dp
+"":   normal "ep
+"":   normal dd
+"":   normal k
+"":   normal k
+"":   normal $
+"": else
+"": echo ">> This is not a Verilog file!"
+"": endif
+"":endfunction
+"":com Init call Make_init()
+""" ---------------------------------------------------------
+""
+""
+""" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+""" Make always
+"":function Make_always()
+"": if (@% =~ "[\.]v$" || @% =~ "[\.]V$" || @% =~ "[\.]l$" || @% =~ "[\.]y$" )   "if file is *.v or *.V
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":   let @b = "  "
+"":   let @c = "always @() begin"
+"":   let @d = "end"
+"":   let @e = "\n"
+"":   normal ^
+"":   normal "cp
+"":   normal "ep
+"":   normal "bp
+"":   normal "ap
+"":   normal "ep
+"":   normal "ap
+"":   normal "dp
+"":   normal "ep
+"":   normal dd
+"":   normal k
+"":   normal k
+"":   normal k
+"":   normal w
+"":   normal e
+"": else
+"": echo ">> This is not a Verilog file!"
+"": endif
+"":endfunction
+"":com Always call Make_always()
+""" ---------------------------------------------------------
+""
+""
+""" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+""" Make task
+"":function Make_task()
+"": if (@% =~ "[\.]v$" || @% =~ "[\.]V$" || @% =~ "[\.]l$" || @% =~ "[\.]y$" )   "if file is *.v or *.V
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":   let @b = "  "
+"":   let @c = "task ;"
+"":   let @d = "begin"
+"":   let @e = "end"
+"":   let @f = "endtask"
+"":   let @g = "\n"
+"":   normal ^
+"":   normal "cp
+"":   normal "gp
+"":   normal "ap
+"":   normal "dp
+"":   normal "gp
+"":   normal "bp
+"":   normal "ap
+"":   normal "gp
+"":   normal "ap
+"":   normal "ep
+"":   normal "gp
+"":   normal "ap
+"":   normal "fp
+"":   normal "gp
+"":   normal dd
+"":   normal k
+"":   normal k
+"":   normal k
+"":   normal k
+"":   normal k
+"":   normal $
+"": else
+"": echo ">> This is not a Verilog file!"
+"": endif
+"":endfunction
+"":com Task call Make_task()
+""" ---------------------------------------------------------
+""
+""
+""" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+""" Make case
+"":function Make_case()
+"": if (@% =~ "[\.]v$" || @% =~ "[\.]V$" || @% =~ "[\.]l$" || @% =~ "[\.]y$" )   "if file is *.v or *.V
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":     let @b = "  "
+"":     let @c = "case()"
+"":     let @d = "default:"
+"":     let @e = "endcase"
+"":     let @g = "\n"
+"":     normal ^
+"":     normal "cp
+"":     normal "gp
+"":     normal "bp
+"":     normal "ap
+"":     normal "gp
+"":     normal "ap
+"":     normal "dp
+"":     normal "gp
+"":     normal "ap
+"":     normal "ep
+"":     normal "gp
+"":     normal dd
+"":     normal k
+"":     normal k
+"":     normal k
+"":     normal k
+"":     normal $
+"": else
+"": echo ">> This is not a Verilog file!"
+"": endif
+"":endfunction
+"":com Case call Make_case()
+""" ---------------------------------------------------------
+""
+""
+""" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+""" Make module
+"":function Make_module()
+"": if (@% =~ "[\.]v$" || @% =~ "[\.]V$" || @% =~ "[\.]l$" || @% =~ "[\.]y$" )   "if file is *.v or *.V
+"":   normal $
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":     let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+"":   let @b = "  "
+"":   let @c = "module ;"
+"":   let @d = "endmodule"
+"":   let @e = "\n"
+"":   normal "cp
+"":   normal "ep
+"":   normal "bp
+"":   normal "ap
+"":   normal "ep
+"":   normal "ap
+"":   normal "dp
+"":   normal "ep
+"":   normal dd
+"":   normal k
+"":   normal k
+"":   normal k
+"":   normal $
+"": else
+"": echo ">> This is not a Verilog file!"
+"": endif
+"":endfunction
+"":com Module call Make_module()
+""" ---------------------------------------------------------
+""
+""
+""" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+""" Make Flip-Flop
+"":function Make_FF()
+"": if (@% =~ "[\.]v$" || @% =~ "[\.]V$" || @% =~ "[\.]l$" || @% =~ "[\.]y$" )   "if file is *.v or *.V
+"":   normal $
+""" :   let @b = "  "
+""" :   let @c = "always @(posedge clk_mg or negedge rst_m_n)"
+""" :   let @d = "begin: __"
+""" :   let @e = "if (~rst_m_n) begin"
+""" :   let @t = "end else if (sync_rst) begin"
+""" :   let @f = "end else begin"
+""" :   let @g = "end"
+""" :   let @h = "\n"
+"" :   let @b = "  "
+"" :   let @c = "always @(posedge clk_m or negedge rst_m_n)begin"
+"" :   let @d = "if (~rst_m_n) begin"
+"" :   let @e = "end"
+"" :   let @t = "else begin"
+"" :   let @f = " if (~sft_rst_m_n) begin"
+"" :   let @h = "else begin"
+"" :   let @i = "if (init) begin"
+"" :   let @j = "end else begin"
+"" :   let @o = "\n"
+"" :   let @p = " "
+"":   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"":   let @a = getline(line("."))
+"":     normal ^
+"":   else
+"":     let @a = Get_blank()
+"":     normal $
+"":     normal "hp
+""":     let @a = getline(line("."))
+"":     normal "ap
+"":   endif
+""" :   normal "cp
+""" :   normal "hp
+""" :   normal "ap
+""" :   normal "dp
+""" :   normal "hp
+""" :   normal "ap
+""" :   normal "bp
+""" :   normal "ep
+""" :   normal "hp
+""" :   normal "bp
+""" :   normal "bp
+""" :   normal "ap
+""" :   normal "hp
+""" :   normal "ap
+""" :   normal "bp
+""" :   normal "tp
+""" :   normal "hp
+""" :   normal "bp
+""" :   normal "bp
+""" :   normal "ap
+""" :   normal "hp
+""" :   normal "ap
+""" :   normal "bp
+""" :   normal "fp
+""" :   normal "hp
+""" :   normal "bp
+""" :   normal "bp
+""" :   normal "ap
+""" :   normal "hp
+""" :   normal "bp
+""" :   normal "ap
+""" :   normal "gp
+""" :   normal "hp
+""" :   normal "ap
+""" :   normal "gp
+""" :   normal "hp
+"":   normal "op
+"":   normal "cp
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "dp
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "ep
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "tp
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "pp
+"":   normal "fp
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "ep
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "tp
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "ip
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "ep
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "tp
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "ep
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "bp
+"":   normal "ep
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "bp
+"":   normal "bp
+"":   normal "ep
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "ep
+"":   normal "op
+"":   normal "ap
+""
+"":   normal "op
+""
+"":   normal dd
+"":   normal k
+"":   normal k
+"":   normal k
+"":   normal k
+"":   normal k
+"":   normal k
+"":   normal k
+"":   normal k
+"":   normal k
+"":   normal $
+"": else
+"": echo ">> This is not a Verilog file!"
+"": endif
+""":   let @a = ""
+""":   let @b = ""
+""":   let @c = ""
+""":   let @d = ""
+""":   let @e = ""
+""":   let @f = ""
+""":   let @g = ""
+""":   let @h = ""
+"":endfunction
+"":com MakeFF call Make_FF()
+""" ---------------------------------------------------------
+""
+""
+" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+"Get blank
+:function Get_blank()
+: let @z = ""
+: normal ^
+: if(col(".") > 1)
+: let i = col(".") - 1
+: normal 0
+:  while col('.') < i
+":   let @z = @z.getline(".")[col(".")-1]
+:   let @z = @z." "
+:   normal l
+: endwhile
+: let @z = @z.getline(".")[col(".")-1]
+: endif
+: return @z
+:endfunction
+" ---------------------------------------------------------
+
+
+""" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+""" increase numbers continuously from <start> by <step>
+""" <start> = 0 as initial value
+""" <step>  = 1 as initial value
+"" :function Make_Increasing(...)
+"" : let k = 0
+"" : let pad = 0
+"" : let start = 0
+"" : let step = 1
+"" " : echo "start: " a:firstline "last: " a:lastline
+"" : for s in a:000
+"" :   if(s=="-p")
+"" :     let pad = 1
+"" :   else
+"" :     let k = k + 1
+"" :   endif
+"" : endfor
+"" : if(k==1)
+"" :   let start = a:1
+"" : endif
+"" : if(k==2)
+"" :   let start = a:1
+"" :   let step  = a:2
+"" : endif
+"" ": echo "start = " start " step = " step
+"" : let flag_c = 0
+"" : let flag_l = 0
+"" : normal gv
+"" : normal o
+"" ": normal `>
+"" : normal mX
+"" : let top =  line(".")
+"" : let left =  col(".")
+"" : normal o
+"" ": normal `<
+"" : normal mY
+"" : let bottom =  line(".")
+"" : let right =  col(".")
+"" : normal v
+"" : normal v
+"" "" permute between left and right (column)
+"" : if(left > right)
+"" :   let temp = left
+"" :   let left = right
+"" :   let right = temp
+"" :   let flag_c = 1
+"" : endif
+"" "" permute between top and bottom (line)
+"" : if(top > bottom)
+"" :   let temp = top
+"" :   let top = bottom
+"" :   let bottom = temp
+"" :   let flag_l = 1
+"" : endif
+"" : let end = start + (bottom - top)*step
+"" : let temp = strlen(end)
+"" : let length = right - left + 1
+"" : let diff_c = right - left
+"" : if (length < temp)
+"" :   let length = temp
+"" : endif
+"" " move to (top, left) point
+"" : if(flag_l == 0)
+"" :   normal `X
+"" :   if(flag_c == 1)
+"" :     let i = 0
+"" :     while(i < diff_c)
+"" :       normal h
+"" :       let i = i + 1
+"" :     endwhile
+"" :   endif
+"" : else
+"" :   normal `Y
+"" :   if(flag_c == 0)
+"" :     let i = 0
+"" :     while(i < diff_c)
+"" :       normal h
+"" :       let i = i + 1
+"" :     endwhile
+"" :   endif
+"" : endif
+"" "calculate and paste to file
+"" : let line = top
+"" : let temp = start
+"" : while(line <= bottom)
+"" :   normal v
+"" :   let i = 0
+"" :   while(i < diff_c)
+"" :     normal l
+"" :     let i = i + 1
+"" :   endwhile
+"" :   let str_temp = strlen(temp)
+"" :   let i = str_temp
+"" :   let @z = ""
+"" :   let str_pad = " "
+"" :   if(pad==1)
+""       let str_pad = "0"
+"" :   endif
+"" :   while(i < length)
+"" :     let @z = @z . str_pad
+"" :     let i = i + 1
+"" :   endwhile
+"" :   if(temp < 0)
+"" :     let temp_n = temp*(-1)
+"" :     let @z = "-" . @z
+"" :     let @z = @z . temp_n
+"" :   else
+"" :   let @z = @z . temp
+"" :   endif
+"" :   let @z = printf("%s", @z)
+"" :   normal "zP
+"" "":   normal "zp
+"" :   let i = 0
+"" :   while(i < length-1)
+"" :     normal h
+"" :     let i = i + 1
+"" :   endwhile
+"" :   normal j
+"" :   let temp = temp + step
+"" :   let line = line + 1
+"" : endwhile
+"" :endfunction
+"" " :com -nargs=* Increasing call Make_Increasing(<f-args>)
+"" :com -range=% -nargs=* Increasing call Make_Increasing(<f-args>)
+"" " <C-L> means Linear
+"" :vmap <C-W><C-L> <ESC>:Increasing
+"" " :vnoremap <special> # <ESC>:Increasing
+"" " ---------------------------------------------------------
+
+" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+"Use Tab and BackTab in completion
+function! CleverTab()
+  if(strpart( getline('.'), col('.')-2, 1 ) =~ '[a-zA-Z0-9_]')
+    return "\<C-N>"
+  elseif (strpart( getline('.'), col('.')-2, 1 ) =~ '/')
+    return "\<C-X>\<C-F>\<C-P>"
+  else
+    return "\<Tab>"
+  endif
+endfunction
+inoremap <Tab> <C-R>=CleverTab()<CR>
+" ---------------------------------------------------------
+" "_________________
+" "Typing assistance
+" let letter = "0"
+" while letter <=# "9"
+"     execute "inoremap <buffer>" letter letter . "<c-n><c-p>"
+"     let letter = nr2char(char2nr(letter) + 1)
+" endwhile
+" let letter = "a"
+" while letter <=# "z"
+"     execute "inoremap <buffer>" letter letter . "<c-n><c-p>"
+"     let letter = nr2char(char2nr(letter) + 1)
+" endwhile
+" let letter = "A"
+" while letter <=# "Z"
+"     execute "inoremap <buffer>" letter letter . "<c-n><c-p>"
+"     let letter = nr2char(char2nr(letter) + 1)
+" endwhile
+"
+" execute "inoremap <buffer> _  _<c-n><c-p>"
+"right alignment
+
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Fill space on current column to col
+:function! Fill(col)
+:while (col(".") < a:col)
+: normal i
+: normal l
+:endwhile
+:endfunction
+
+"Fill space at the last position to col
+function! FillEnd(col)
+normal $
+while (col(".") < a:col)
+ normal A
+ normal l
+endwhile
+endfunction
+
+"Insert number automatically at beginning of line
+"`q   = num
+"`q+1 = num + 1
+:function! NumB(num)
+:normal `q
+:let i = line(".")
+:normal `w
+:let j = line(".")
+:let k = a:num
+:while i <= j
+:exec "normal " . i . "G"
+:exec "normal 0i" . k
+:let i = i + 1
+:let k = k + 1
+:endwhile
+:endfunction
+
+"Insert number automatically at beginning of line
+"`q   = num
+"`q+1 = num + 1
+:function! NumBR(num)
+:normal `q
+:let i = line(".")
+:normal `w
+:let j = line(".")
+:let k = a:num
+:while i <= j
+:exec "normal " . i . "G"
+:exec "normal 0i" . k
+:let i = i + 1
+:let k = k - 1
+:endwhile
+:endfunction
+
+"Insert number automatically at end of line
+"`q   = num
+"`q+1 = num + 1
+:function! NumE(num)
+:normal `q
+:let i = line(".")
+:normal `w
+:let j = line(".")
+:let k = a:num
+:while i <= j
+:exec "normal " . i . "G"
+:exec "normal A" . k
+:let i = i + 1
+:let k = k + 1
+:endwhile
+:endfunction
+
+"Insert number automatically at end of line
+:function! NumER(num)
+:normal `q
+:let i = line(".")
+:normal `w
+:let j = line(".")
+:let k = a:num
+:while i <= j
+:exec "normal " . i . "G"
+:exec "normal A" . k
+:let i = i + 1
+:let k = k - 1
+:endwhile
+:endfunction

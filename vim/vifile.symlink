@@ -1,0 +1,237 @@
+:so ~/.vifile
+" Disable ELP
+:let g:loaded_logipat = 1
+" :set noap
+"80 char
+":let &colorcolumn=join(range(81,999),",")
+:set wildmode=list
+:set foldenable
+:set sm
+:set ts=4
+:set cwh=1
+:set wiw=1
+":set textwidth=80
+:set cindent shiftwidth=4
+:set autoindent
+" Display the number of <line>,<column>
+" at the Right-Bottom of the screen.
+:set ruler
+:set ai
+":set expandtab
+" Display command that are typing.
+:set showcmd
+" Display a line that indicate where the cursor is.
+"
+":set cursorline " VIM7 only
+"
+":set cursorcolumn
+" Display line number on the left of each line.
+" :set number
+" set the Width of a number (when :set number)
+":set numberwidth=4
+:set hlsearch
+:set incsearch
+" set <backspace> key can delete all.
+:set bs=2
+:%retab!
+:filetype plugin on
+:highlight ColorColumn ctermbg=235 guibg=#2c2d27
+if !exists("syntax_on")
+  syntax on
+endif
+" enable mouse
+:se mouse=a
+:filetype plugin on
+"
+"set vimdiff color
+:se t_Co=256
+"set display color for diff
+" :highlight Comment  ctermfg=darkblue
+:highlight Keyword start=t_if stop=t_end
+:highlight   Search      term=reverse    cterm=underline         ctermbg=9
+:highlight   DiffText    term=reverse    cterm=none,underline    ctermbg=15
+":highlight   CursorLine  term=reverse  cterm=none             ctermbg=11
+":highlight   Cursorcolumn  term=reverse  cterm=none  ctermbg=lightred
+:highlight   Cursorcolumn  term=reverse  cterm=none ctermfg=white ctermbg=Grey
+:highlight Pmenu ctermbg=15 ctermfg=darkcyan
+:highlight PmenuSel term=reverse ctermbg=15 ctermfg=yellow
+" ===============================================
+:au BufNewFile,BufRead   *.sh        set filetype=csh
+:au BufNewFile,BufRead   *.sv        set filetype=verilog_systemverilog
+:au BufNewFile,BufRead   *.v        set filetype=verilog
+:au BufNewFile,BufRead   *.psl       set filetype=psl
+:au BufNewFile,BufRead   *.log       set filetype=help
+:au BufNewFile,BufRead   *.exrc      set filetype=vim
+:au BufNewFile,BufRead   *.vimrc     set filetype=vim
+:au BufNewFile,BufRead   *.vifile    set filetype=vim
+:au BufNewFile,BufRead   *.program    set filetype=plex
+:au BufNewFile,BufRead   *.sparam    set filetype=plex
+:au BufNewFile,BufRead   *.ssurv    set filetype=plex
+
+" ===============================================
+" au FileType verilog set mps+=<:>
+
+" ===============================================
+if !exists("syntax_on")
+  source ~/.vim/syntax/psl.vim
+  source ~/.vim/syntax/verilog_systemverilog.vim
+  source ~/.vim/syntax/plex.vim
+endif
+
+" ===============================================
+:filetype plugin on
+:abbreviate #b //****************************************//
+:abbreviate #d use Data::Dumper;
+:abbreviate #p print "Line - " __LINE__ . ":" . Dumper() . "\n";
+"set number
+
+
+" ================================================
+" inoremap ( ()<left>
+" iabbrev ( ()<left>
+" iabbrev <silent> { {<enter>}<up><end><C-R>=Eatchar('\s')<CR>
+" inoremap [ []<left>
+" inoremap " ""<left>
+" inoremap ' ''<left>
+" iabbrev [ []<left>
+" iabbrev " ""<left>
+" iabbrev ' ''<left>
+
+" iabbrev <silent> begin begin<enter>end<up><end><C-R>=Eatchar('\s')<CR>
+
+"==================VIM 7.x=========================="
+func Eatchar(pat)
+let c = nr2char(getchar(0))
+return (c =~ a:pat) ? '' : c
+endfunc
+
+""Current module
+" fun! Vwhereami()
+" 	let modstart=search('^\s*module\s','bnW')
+" 	let line=getline(modstart)
+" 	let modname=substitute(line,'^\s*module\s\+\(\w\+\).*',"\\1","")
+" 	highlight VerilogTrace ctermbg=green guibg=green
+" 	exec "normal \<C-W>w"
+" 	exec "match VerilogTrace /" . modname . "/"
+" 	call search("(\<" . modname . "\>)","W")
+" 	exec "normal \<C-W>w"
+" endfunction
+
+" Test new set up
+syntax on
+
+set nocompatible
+set smartindent
+set shiftwidth=4
+set backspace=indent,eol,start
+set ruler
+set number
+set showcmd
+set incsearch
+set hlsearch
+
+set mouse=a
+
+filetype off
+
+"----- GENERAL SETTINGS-------
+set laststatus=2
+let g:airline_powerline_fonts = 1
+let g:airline_detect_paste=1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='solarized'
+set background=dark
+let g:solarized_termcolors=256
+" colorscheme blackbeauty
+" colorscheme southernlights
+"colorscheme solarized
+colorscheme default
+
+:highlight ColorColumn ctermbg=250 guibg=#2c2d27
+
+"---------NERD-TREE SETTINGS----------
+nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
+" let g:nerdtree_tabs_open_on_console_startup = 1
+
+
+"-------- SYNTASTIC SETTINGS---------
+let g:syntastic_error_symbol = '✘'
+let g:syntastic_warning_symbol = "▲"
+augroup mySyntastic
+    au!
+    au FileType tex let b:syntastic_mode = "passive"
+augroup END
+
+
+"-------- TAGS SETTINGS --------------------------------
+let g:easytags_events = ['BufReadPost', 'BufWritePost']
+let g:easytags_async = 1
+let g:easytags_dynamic_files = 2
+let g:easytags_resolve_links = 1
+let g:easytags_suppress_ctags_warning = 1
+" let g:tagbar_autoclose=0
+
+nmap <silent> <leader>b :TagbarToggle<CR>
+"autocmd BufEnter * nested :call tagbar#autoopen(0)
+
+"---------GIT SETTINGS--------------
+hi clear SignColumn
+let g:airline#extensions#hunks#non_zero_only = 1
+
+
+"----------DELIMITEMATE SETTINGS-----------------
+let delimitMate_expand_cr = 1
+augroup mydelimitMate
+    au!
+    au FileType markdown let b:delimitMate_nesting_quotes = ["`"]
+    au FileType tex let b:delimitMate_quotes = ""
+    au FileType tex let b:delimitMate_matchpairs = "(:),[:],{:},`:'"
+    au FileType python let b:delimitMate_nesting_quotes = ['"', "'"]
+augroup END
+
+"-----------TMUX SETTINGS--------------
+let g:tmux_navigator_save_on_switch = 2
+
+"-----------Highlight Trailing Space and Tabs--------------
+let g:toggleHighlightWhitespace = 1
+function! ToggleHighlightWhitespace()
+  let g:toggleHighlightWhitespace = 1 - g:toggleHighlightWhitespace
+  call RefreshHighlightWhitespace()
+endfunction
+
+function! RefreshHighlightWhitespace()
+  if g:toggleHighlightWhitespace == 1 " normal action, do the hi
+    highlight ExtraWhitespace ctermbg=red guibg=red
+    match ExtraWhitespace /\s\+$\|\t/
+    augroup HighLightWhitespace
+      autocmd BufWinEnter * match ExtraWhitespace /\s\+$\|\t/
+      autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$\|\t/
+      autocmd InsertLeave * match ExtraWhitespace /\s\+$\|\t/
+      autocmd BufWinLeave * call clearmatches()
+    augroup END
+  else " clear whitespace highlighting
+    call clearmatches()
+    autocmd! HighLightWhitespace BufWinEnter
+    autocmd! HighLightWhitespace InsertEnter
+    autocmd! HighLightWhitespace InsertLeave
+    autocmd! HighLightWhitespace BufWinLeave
+  endif
+endfunction
+
+autocmd BufWinEnter * call RefreshHighlightWhitespace()
+autocmd BufWinLeave * call RefreshHighlightWhitespace()
+nnoremap <leader>w :call ToggleHighlightWhitespace()<cr>
+
+" highlight ExtraWhitespace ctermbg=red guibg=red
+" au ColorScheme * highlight ExtraWhitespace guibg=red
+" au BufEnter * match ExtraWhitespace /\s\+$\|\t/
+" au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$\|\t/
+" au InsertLeave * match ExtraWhiteSpace /\s\+$\|\t/
+
+" highlight SpecialKey ctermbg=red guibg=red
+" set list
+" set listchars=tab:>-
+"
+"
+"
+:set ft=text

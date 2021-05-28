@@ -1,0 +1,7 @@
+#!/bin/bash
+
+lbox="dus1uw2lbox$1"
+wbox="dus1uw2wbox$1"
+noc=qus1uw2lnoc001
+
+exec ssh -t $noc sudo salt-cloud -a reboot $lbox $wbox

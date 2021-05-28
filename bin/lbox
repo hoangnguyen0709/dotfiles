@@ -1,0 +1,6 @@
+#!/bin/bash
+
+lbox="dus1uw2lbox$1"
+exec ssh ${lbox}
+
+

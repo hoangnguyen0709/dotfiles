@@ -1,0 +1,23 @@
+Uninstall:
+
+unlink ~/.bin
+unlink ~/.gitignore
+unlink ~/.gemrc
+unlink ~/.gvimrc
+unlink ~/.irbrc
+unlink ~/.vim
+unlink ~/.vimrc
+unlink ~/.vifile
+unlink ~/.bashrc
+unlink ~/.gitconfig.local
+rm ~/.zshrc # careful here
+rm ~/.gitconfig
+rm -rf ~/.dotfiles
+rm -rf ~/.oh-my-zsh
+cp -f ~/.vifile.backup ~/.vifile
+cp -f ~/.vimrc.backup ~/.vimrc
+cp -f ~/.zshrc.backup ~/.zshrc
+cp -f ~/.gitconfig.backup ~/.gitconfig
+cp -f ~/.bashrc.backup ~/.bashrc
+
+chsh -s /bin/bash # change back to Bash if you want
