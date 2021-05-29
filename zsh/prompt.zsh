@@ -78,7 +78,7 @@ last_exit_code() {
 }
 
 current_time() {
-  echo "%{$fg_bold[yellow]%}[%D{%d-%m-%Y} %T]%{$reset_color%}"
+  echo "%{$fg_bold[yellow]%}[%D{%d-%m-%Y} %D{%H:%M:%S}]%{$reset_color%}"
 }
 
 export PROMPT=$'\n$(last_exit_code)$(battery_status)$(current_time) in $(directory_name) $(git_dirty)$(need_push) \n›'
