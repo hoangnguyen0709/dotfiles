@@ -1,14 +1,14 @@
 Uninstall:
 
-unlink ~/.bin
-unlink ~/.gitignore
-unlink ~/.gemrc
-unlink ~/.gvimrc
-unlink ~/.irbrc
-unlink ~/.vim
-unlink ~/.vimrc
-unlink ~/.vifile
-unlink ~/.bashrc
+unlink ~/.bin          1234
+unlink ~/.gitignore    1234
+unlink ~/.gemrc        1234
+unlink ~/.gvimrc       1234
+unlink ~/.irbrc        1234
+unlink ~/.vim          1234
+unlink ~/.vimrc        1234
+unlink ~/.vifile       1234
+unlink ~/.bashrc       1234
 unlink ~/.gitconfig.local
 rm ~/.zshrc # careful here
 rm ~/.gitconfig

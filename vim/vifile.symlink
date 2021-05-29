@@ -1,237 +1,113 @@
-:so ~/.vifile
-" Disable ELP
-:let g:loaded_logipat = 1
-" :set noap
-"80 char
-":let &colorcolumn=join(range(81,999),",")
-:set wildmode=list
-:set foldenable
-:set sm
-:set ts=4
-:set cwh=1
-:set wiw=1
-":set textwidth=80
-:set cindent shiftwidth=4
-:set autoindent
-" Display the number of <line>,<column>
-" at the Right-Bottom of the screen.
-:set ruler
-:set ai
-":set expandtab
-" Display command that are typing.
-:set showcmd
-" Display a line that indicate where the cursor is.
-"
-":set cursorline " VIM7 only
-"
-":set cursorcolumn
-" Display line number on the left of each line.
-" :set number
-" set the Width of a number (when :set number)
-":set numberwidth=4
-:set hlsearch
-:set incsearch
-" set <backspace> key can delete all.
-:set bs=2
-:%retab!
-:filetype plugin on
-:highlight ColorColumn ctermbg=235 guibg=#2c2d27
-if !exists("syntax_on")
-  syntax on
-endif
-" enable mouse
-:se mouse=a
-:filetype plugin on
-"
-"set vimdiff color
-:se t_Co=256
-"set display color for diff
-" :highlight Comment  ctermfg=darkblue
-:highlight Keyword start=t_if stop=t_end
-:highlight   Search      term=reverse    cterm=underline         ctermbg=9
-:highlight   DiffText    term=reverse    cterm=none,underline    ctermbg=15
-":highlight   CursorLine  term=reverse  cterm=none             ctermbg=11
-":highlight   Cursorcolumn  term=reverse  cterm=none  ctermbg=lightred
-:highlight   Cursorcolumn  term=reverse  cterm=none ctermfg=white ctermbg=Grey
-:highlight Pmenu ctermbg=15 ctermfg=darkcyan
-:highlight PmenuSel term=reverse ctermbg=15 ctermfg=yellow
-" ===============================================
-:au BufNewFile,BufRead   *.sh        set filetype=csh
-:au BufNewFile,BufRead   *.sv        set filetype=verilog_systemverilog
-:au BufNewFile,BufRead   *.v        set filetype=verilog
-:au BufNewFile,BufRead   *.psl       set filetype=psl
-:au BufNewFile,BufRead   *.log       set filetype=help
-:au BufNewFile,BufRead   *.exrc      set filetype=vim
-:au BufNewFile,BufRead   *.vimrc     set filetype=vim
-:au BufNewFile,BufRead   *.vifile    set filetype=vim
-:au BufNewFile,BufRead   *.program    set filetype=plex
-:au BufNewFile,BufRead   *.sparam    set filetype=plex
-:au BufNewFile,BufRead   *.ssurv    set filetype=plex
-
-" ===============================================
-" au FileType verilog set mps+=<:>
-
-" ===============================================
-if !exists("syntax_on")
-  source ~/.vim/syntax/psl.vim
-  source ~/.vim/syntax/verilog_systemverilog.vim
-  source ~/.vim/syntax/plex.vim
-endif
-
-" ===============================================
-:filetype plugin on
-:abbreviate #b //****************************************//
-:abbreviate #d use Data::Dumper;
-:abbreviate #p print "Line - " __LINE__ . ":" . Dumper() . "\n";
-"set number
+" Creating a mapping key for comment block based on filename
+" This file is source by .exrc
+" Usage:
+"+ Mark beginning point and ending point by mq and mw
+"+ Type these control keys in command mode:
+"  - CRTL_W D    : comment lines from `q to `w
+"  - CRTL_W F    : uncomment lines from `q to `w
 
 
-" ================================================
-" inoremap ( ()<left>
-" iabbrev ( ()<left>
-" iabbrev <silent> { {<enter>}<up><end><C-R>=Eatchar('\s')<CR>
-" inoremap [ []<left>
-" inoremap " ""<left>
-" inoremap ' ''<left>
-" iabbrev [ []<left>
-" iabbrev " ""<left>
-" iabbrev ' ''<left>
-
-" iabbrev <silent> begin begin<enter>end<up><end><C-R>=Eatchar('\s')<CR>
-
-"==================VIM 7.x=========================="
-func Eatchar(pat)
-let c = nr2char(getchar(0))
-return (c =~ a:pat) ? '' : c
-endfunc
-
-""Current module
-" fun! Vwhereami()
-" 	let modstart=search('^\s*module\s','bnW')
-" 	let line=getline(modstart)
-" 	let modname=substitute(line,'^\s*module\s\+\(\w\+\).*',"\\1","")
-" 	highlight VerilogTrace ctermbg=green guibg=green
-" 	exec "normal \<C-W>w"
-" 	exec "match VerilogTrace /" . modname . "/"
-" 	call search("(\<" . modname . "\>)","W")
-" 	exec "normal \<C-W>w"
-" endfunction
-
-" Test new set up
-syntax on
-
-set nocompatible
-set smartindent
-set shiftwidth=4
-set backspace=indent,eol,start
-set ruler
-set number
-set showcmd
-set incsearch
-set hlsearch
-
-set mouse=a
-
-filetype off
-
-"----- GENERAL SETTINGS-------
-set laststatus=2
-let g:airline_powerline_fonts = 1
-let g:airline_detect_paste=1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme='solarized'
-set background=dark
-let g:solarized_termcolors=256
-" colorscheme blackbeauty
-" colorscheme southernlights
-"colorscheme solarized
-colorscheme default
-
-:highlight ColorColumn ctermbg=250 guibg=#2c2d27
-
-"---------NERD-TREE SETTINGS----------
-nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
-" let g:nerdtree_tabs_open_on_console_startup = 1
-
-
-"-------- SYNTASTIC SETTINGS---------
-let g:syntastic_error_symbol = '✘'
-let g:syntastic_warning_symbol = "▲"
-augroup mySyntastic
-    au!
-    au FileType tex let b:syntastic_mode = "passive"
-augroup END
-
-
-"-------- TAGS SETTINGS --------------------------------
-let g:easytags_events = ['BufReadPost', 'BufWritePost']
-let g:easytags_async = 1
-let g:easytags_dynamic_files = 2
-let g:easytags_resolve_links = 1
-let g:easytags_suppress_ctags_warning = 1
-" let g:tagbar_autoclose=0
-
-nmap <silent> <leader>b :TagbarToggle<CR>
-"autocmd BufEnter * nested :call tagbar#autoopen(0)
-
-"---------GIT SETTINGS--------------
-hi clear SignColumn
-let g:airline#extensions#hunks#non_zero_only = 1
-
-
-"----------DELIMITEMATE SETTINGS-----------------
-let delimitMate_expand_cr = 1
-augroup mydelimitMate
-    au!
-    au FileType markdown let b:delimitMate_nesting_quotes = ["`"]
-    au FileType tex let b:delimitMate_quotes = ""
-    au FileType tex let b:delimitMate_matchpairs = "(:),[:],{:},`:'"
-    au FileType python let b:delimitMate_nesting_quotes = ['"', "'"]
-augroup END
-
-"-----------TMUX SETTINGS--------------
-let g:tmux_navigator_save_on_switch = 2
-
-"-----------Highlight Trailing Space and Tabs--------------
-let g:toggleHighlightWhitespace = 1
-function! ToggleHighlightWhitespace()
-  let g:toggleHighlightWhitespace = 1 - g:toggleHighlightWhitespace
-  call RefreshHighlightWhitespace()
+" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+function! Make_Comments()
+   if(&ft == "asm")                                "asm
+     :s/^/; /
+   elseif ((&ft == "verilog") || (&ft == "sc"))    "verilog
+     :s/^/\/\/ /
+   elseif ((&ft == "c") || (&ft == "cpp"))         "C
+     :s/^/\/\/ /
+   elseif (&ft == "vim")                           "vim
+     :s/^/" /
+   elseif (&ft == "matlab")                        "Matlab
+     :s/^/% /
+   elseif (&ft == "psl")                           "PSL
+     :s/^/\/\/ /
+   elseif (&ft == "sbt") || (&ft == "scala")       "scala
+     :s/^/\/\/ /
+   else                                            "csh, perl, tcl
+     :s/^/# /
+   endif
+":%s/a/b/g
+":%s/b/2/g
+":%s/c/3
 endfunction
+":com Make_Comments call Make_Comments()
+:map <C-W><C-D> :call Make_Comments()<CR>
+" ---------------------------------------------------------
+:map <C-C> "+y<ESC>
+:map <C-W><C-V> "+gp<ESC><LEFT><LEFT><LEFT>
+:map <C-W><C-X> "+x<ESC>
+:map <C-W><C-A> <ESC>ggVG$
+:map <C-Y> <Esc><C-R>
+:map <F5> :e!<CR>
+:map <F2> :mksession ~/.vim/session/
+:map <F3> :source ~/.vim/session/
 
-function! RefreshHighlightWhitespace()
-  if g:toggleHighlightWhitespace == 1 " normal action, do the hi
-    highlight ExtraWhitespace ctermbg=red guibg=red
-    match ExtraWhitespace /\s\+$\|\t/
-    augroup HighLightWhitespace
-      autocmd BufWinEnter * match ExtraWhitespace /\s\+$\|\t/
-      autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$\|\t/
-      autocmd InsertLeave * match ExtraWhitespace /\s\+$\|\t/
-      autocmd BufWinLeave * call clearmatches()
-    augroup END
-  else " clear whitespace highlighting
-    call clearmatches()
-    autocmd! HighLightWhitespace BufWinEnter
-    autocmd! HighLightWhitespace InsertEnter
-    autocmd! HighLightWhitespace InsertLeave
-    autocmd! HighLightWhitespace BufWinLeave
+":map <C-S> :`w<CR>
+" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+function! Make_Uncomments()
+  if(&ft == "asm")                               " asm
+    if( getline('.') =~ '^ *;')                " if line start with zero or more spaces followed by ;
+      :s/^\( *\); \=/\1/
+    endif
+  elseif ((&ft == "verilog") || (&ft == "sc"))    "verilog
+    if( getline('.') =~ '^ *\/\/')             " if line start with zero or more spaces followed by //
+      :s/^\( *\)\/\/ \=/\1/
+    endif
+  elseif ((&ft == "c") || (&ft == "cpp"))         "C
+    if( getline('.') =~ '^ *\/\/')             " if line start with zero or more spaces followed by //
+      :s/^\( *\)\/\/ \=/\1/
+    endif
+  elseif (&ft == "vim")                           " vim
+    if( getline('.') =~ '^ *"')
+      :s/^\( *\)" \=/\1/
+    endif
+  elseif (&ft == "matlab")                        " Matlab
+    if( getline('.') =~ '^ *%')
+      :s/^\( *\)% \=/\1/
+    endif
+  elseif (&ft == "psl")                           " PSL
+    if( getline('.') =~ '^ *\/\/')
+      :s/^\( *\)\/\/ \=/\1/
+    endif
+  else                                            " csh, perl, tcl
+    if( getline('.') =~ '^ *#')                " if line start with zero or more spaces followed by #
+      :s/^\( *\)# \=/\1/
+    endif
   endif
 endfunction
+:map <C-W><C-F> :call Make_Uncomments()<CR>
+" ---------------------------------------------------------
 
-autocmd BufWinEnter * call RefreshHighlightWhitespace()
-autocmd BufWinLeave * call RefreshHighlightWhitespace()
-nnoremap <leader>w :call ToggleHighlightWhitespace()<cr>
+"Map for increment
+"
+" vnoremap <C-A> :Inc<CR>
+" vnoremap <C-X> :Inc -1<CR>
 
-" highlight ExtraWhitespace ctermbg=red guibg=red
-" au ColorScheme * highlight ExtraWhitespace guibg=red
-" au BufEnter * match ExtraWhitespace /\s\+$\|\t/
-" au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$\|\t/
-" au InsertLeave * match ExtraWhiteSpace /\s\+$\|\t/
+" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+"select all, same with Ctrl-A
+:map <C-W><C-A> gg <S-V> G
+" ---------------------------------------------------------
+"Disable below funtionc June 03,2009 Remove
+"
 
-" highlight SpecialKey ctermbg=red guibg=red
-" set list
-" set listchars=tab:>-
-"
-"
-"
-:set ft=text
+":com Add_comments call Add_comments()
+:com -range=% -nargs=* Comments call Add_comments(<f-args>)
+" ---------------------------------------------------------
+
+
+" +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+"Use Tab and BackTab in completion
+function! CleverTab()
+  if(strpart( getline('.'), col('.')-2, 1 ) =~ '[a-zA-Z0-9_]')
+    return "\<C-N>"
+  elseif (strpart( getline('.'), col('.')-2, 1 ) =~ '/')
+    return "\<C-X>\<C-F>\<C-P>"
+  else
+    return "\<Tab>"
+  endif
+endfunction
+inoremap <Tab> <C-R>=CleverTab()<CR>
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
