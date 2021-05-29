@@ -18,6 +18,9 @@ alias git_cfg_local="git config --local user.email \"thehoang0709@gmail.com\" &&
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;37;41'
 
+# fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 # python
 alias pip3="python3 -m pip"
 
