@@ -47,7 +47,8 @@ alias vpi_conf="vim ~/work/my-utils/utils/pi_conf.sh"
 
 
 #### Axon
-alias work="cd ~/Work/"
+alias w="cd ~/Work/"
+alias t="cd ~/tmp/"
 alias centos="ssh htnguyen@localhost -p 2222"
 alias centos8="ssh htnguyen@localhost -p 1111"
 alias box_conf="cat ~/work/my-utils/utils/axon/box_conf.sh"

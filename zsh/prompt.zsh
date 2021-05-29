@@ -77,7 +77,11 @@ last_exit_code() {
   fi
 }
 
-export PROMPT=$'\n$(last_exit_code)$(battery_status)in $(directory_name) $(git_dirty)$(need_push) \n›'
+current_time() {
+  echo "%{$fg_bold[yellow]%}[%D{%d-%m-%Y} %T]%{$reset_color%}"
+}
+
+export PROMPT=$'\n$(last_exit_code)$(battery_status)$(current_time) in $(directory_name) $(git_dirty)$(need_push) \n›'
 set_prompt () {
   export RPROMPT="%{$fg_bold[cyan]%}%{$reset_color%}"
 }
