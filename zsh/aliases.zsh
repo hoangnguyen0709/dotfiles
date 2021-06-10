@@ -39,6 +39,8 @@ export GOPRIVATE="git.taservs.net/ecom"
 export PATH=$PATH:/Users/htnguyen/go/bin/
 export PATH=$PATH:/usr/local/go/bin
 
+# kustomize
+export PATH="/usr/local/bin:$PATH"
 
 ##### Company
 #### GDC

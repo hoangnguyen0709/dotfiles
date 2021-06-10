@@ -59,7 +59,10 @@ endif
 :highlight   Cursorcolumn  term=reverse  cterm=none ctermfg=white ctermbg=Grey
 :highlight Pmenu ctermbg=15 ctermfg=darkcyan
 :highlight PmenuSel term=reverse ctermbg=15 ctermfg=yellow
+
 " ===============================================
+:au BufNewFile,BufRead   *.git/COMMIT_EDITMSG set filetype=gitcommit
+:au BufNewFile,BufRead   *.git/rebase-merge/git-rebase-todo set filetype=gitcommit
 :au BufNewFile,BufRead   *.sh        set filetype=csh
 :au BufNewFile,BufRead   *.sv        set filetype=verilog_systemverilog
 :au BufNewFile,BufRead   *.v        set filetype=verilog

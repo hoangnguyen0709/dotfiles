@@ -15,8 +15,6 @@
 	co = checkout
 	lsfile = show -–pretty=oneline --name-only
 	cmp = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
-[core]
-	editor = vim
 [url "git@git.taservs.net:"]
 	insteadOf = https://git.taservs.net
 [filter "lfs"]
@@ -26,3 +24,5 @@
 	process = git-lfs filter-process
 [lfs]
 	concurrenttransfers = 10
+[core]
+	editor = vim
