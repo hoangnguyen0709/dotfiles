@@ -18,6 +18,13 @@ alias git_cfg_local="git config --local user.email \"thehoang0709@gmail.com\" &&
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;37;41'
 
+# gsed
+# export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+alias gsed="/usr/local/opt/gnu-sed/libexec/gnubin/sed"
+
+# coreutils gnubin
+export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -33,14 +40,18 @@ export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 # node
 export PATH="/usr/local/opt/node@12/bin:$PATH"
 
+# kustomize
+# should before golang path which is in /usr/local/go/bin/go
+export PATH="/usr/local/bin:$PATH"
+
 # golang
 export GIT_TERMINAL_PROMPT=1
 export GOPRIVATE="git.taservs.net/ecom"
 export PATH=$PATH:/Users/htnguyen/go/bin/
-export PATH=$PATH:/usr/local/go/bin
+export PATH=/usr/local/go/bin:$GOROOT/bin:$PATH
 
-# kustomize
-export PATH="/usr/local/bin:$PATH"
+# promtool
+export PATH=~/Work/upstream/prometheus:$PATH
 
 ##### Company
 #### GDC
@@ -72,6 +83,7 @@ alias nl1_lnoc="ssh pnl1we1lnoc001"
 alias eu1_lnoc="ssh peu1ew1lnoc001"
 alias br1_lnoc="ssh pbr1se1lnoc001"
 alias ag1_lnoc="ssh qag1ge1lnoc001"
+alias la1_lnoc="ssh pla1bs1lnoc001"
 
 export TWOBOX_NUMBER=709
 

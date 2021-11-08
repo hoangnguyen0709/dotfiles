@@ -22,7 +22,7 @@
 :set showcmd
 
 " Display a line that indicate where the cursor is.
-:set cursorline " VIM7 only
+" :set cursorline " VIM7 only
 
 " Display line number on the left of each line.
 :set number

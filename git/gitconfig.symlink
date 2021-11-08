@@ -26,3 +26,4 @@
 	concurrenttransfers = 10
 [core]
 	editor = vim
+	excludesfile = /Users/htnguyen/.gitignore
