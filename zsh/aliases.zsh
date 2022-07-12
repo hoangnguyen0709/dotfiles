@@ -53,6 +53,10 @@ export PATH=/usr/local/go/bin:$GOROOT/bin:$PATH
 # promtool
 export PATH=~/Work/upstream/prometheus:$PATH
 
+# nvm
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh
+
 ##### Company
 #### GDC
 alias pi_conf="cat ~/work/my-utils/utils/pi_conf.sh"
@@ -68,7 +72,7 @@ alias box_conf="cat ~/work/my-utils/utils/axon/box_conf.sh"
 alias vbox_conf="vim ~/work/my-utils/utils/axon/box_conf.sh"
 alias deploy="/Users/htnguyen/Work/improvement-toolbox/misc-scripts/deploy.sh"
 alias crt="echo /Users/htnguyen/Work/EVP/crt"
-alias axatom="python3 /usr/local/bin/axatom"
+alias axatom="~/Library/Python/3.8/bin/axatom"
 
 alias jira="python3 /Users/htnguyen/Work/my-utils/jira_report/main.py"
 alias evp_report="cd /Users/htnguyen/Work/EVP/management/sprint_planning/2021/EVP"
@@ -96,7 +100,7 @@ fi
 
 export PATH=$PATH:$HOME/Work/my-utils/utils/axon
 export PATH=$PATH:$HOME/Work/my-utils/utils/
-export PATH="/usr/local/opt/python@3.8/bin:$PATH"
+export PATH="~/Library/Python/3.8/bin:$PATH"
 
 function plookup() {
   python3 -W /Users/htnguyen/Work/EVP/upstream/improvement-toolbox/misc-scripts/pid-lookup/plookup.py $1
